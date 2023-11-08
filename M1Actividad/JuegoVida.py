@@ -1,3 +1,4 @@
+#:)
 """
 Modifico el juego de la vida que programó Edgar Covantes de Mty
 Él lo hizo todo para Jupyter usando GColab y tomando datos usando el DataCollector

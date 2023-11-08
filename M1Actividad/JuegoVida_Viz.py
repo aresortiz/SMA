@@ -1,3 +1,4 @@
+#se corre este jiji
 """
 Visualizador del Juego de la Vida
 Esta parte es completamente diferente a la que hizo Edgar pues el lo hace todo en Jupyter
