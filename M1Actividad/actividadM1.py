@@ -56,7 +56,10 @@ class TrashAgent(Agent):
 
 
 class RoomModel(Model):
-    def __init__(self, M, N, agents):
+    def __init__(self, M, N, agents, max_time):
+        self.M = M
+        self.N = N
+        self.max_time = max_time
         self.num_agents = agents
         self.grid = MultiGrid(M, N, True)
         self.schedule = SimultaneousActivation(self)
@@ -81,13 +84,15 @@ class RoomModel(Model):
         
                 
         print("SUCIAS: ", self.dirty_cells)
-        
+        print("M:", self.M)
+        print("N: ", self.N)
 
     def step(self):
         self.schedule.step()
-        print("LIMPIAS: ", self.clean_cells)
-        if self.clean_cells == self.dirty_cells:
+        print(self.end_time - self.start_time)
+        if self.start_time == self.max_time:
             self.end_time = time()
             print(f'Total elapsed time {self.end_time - self.start_time}')
+            print(f'Porcentage cleaned: {(self.clean_cells*100) / self.dirty_cells}%')
+            print(f'Porcentage initially dirty: {(self.dirty_cells*100) /self.M * self.N}%')
             self.running = False
-    
