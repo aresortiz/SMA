@@ -1,4 +1,5 @@
-# Equipo 4
+# Pareja 4
+# Actividad 1 - Agentes de limpieza reactivos 
 # Ares Ortiz Botello A01747848
 # Rosa Itzel Figueroa Rosas A01748086
 
@@ -8,10 +9,12 @@ from mesa import Model, Agent
 import numpy as np
 from mesa.time import SimultaneousActivation
 from time import time
-from mesa.visualization.modules import CanvasGrid
+#from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.ModularVisualization import ModularServer
 from mesa.space import MultiGrid
 
+# global clean_cells 
+# clean_cells = 0
 
 class VacuumCleaner(Agent):
 
@@ -27,7 +30,7 @@ class VacuumCleaner(Agent):
                 moore=True,
                 include_center=False
                 )
-        possible_moves = [(x, y) for (x, y) in next_moves if (x - self.pos[0]) <= 1 and (y - self.pos[1]) <= 1]
+        possible_moves = [(x, y) for (x, y) in next_moves if abs(x - self.pos[0]) <= 1 and abs(y - self.pos[1]) <= 1]
         if possible_moves:
             new_position = self.random.choice(possible_moves)
             self.model.grid.move_agent(self, new_position)
@@ -35,8 +38,10 @@ class VacuumCleaner(Agent):
         cell = self.model.grid.get_cell_list_contents(new_position)
         for value in cell:
             if type(value) is TrashAgent:
-                print("Pise basura")
-                self.model.grid.remove_agent(value)
+                if value.live == 1:
+                    self.model.grid.remove_agent(value)
+                    self.model.clean_cells += 1
+                
 
     def step(self):
         self.random_move()
@@ -51,25 +56,38 @@ class TrashAgent(Agent):
 
 
 class RoomModel(Model):
-    def __init__(self, M, N, agentes):
-        self.num_agents = agentes
+    def __init__(self, M, N, agents):
+        self.num_agents = agents
         self.grid = MultiGrid(M, N, True)
         self.schedule = SimultaneousActivation(self)
         self.running = True
         self.start_time = time()
         self.end_time = 0
+        self.clean_cells = 0
+        self.dirty_cells = 0
 
-
-        for i in range(agentes):
+        for i in range(agents):
             agent = VacuumCleaner(i, self)
-            self.grid.place_agent(agent, (0, 0))
+            self.grid.place_agent(agent, (1, 1))
             self.schedule.add(agent)
 
         for i, (x, y) in self.grid.coord_iter():
-            if (x, y) != (0, 0):
+            if (x, y) != (1, 1):
                 dirty_cell = TrashAgent((x, y), self)
                 self.grid.place_agent(dirty_cell, (x, y))
                 self.schedule.add(dirty_cell)
+                if dirty_cell.live == 1:
+                    self.dirty_cells += 1
+        
+                
+        print("SUCIAS: ", self.dirty_cells)
+        
 
     def step(self):
         self.schedule.step()
+        print("LIMPIAS: ", self.clean_cells)
+        if self.clean_cells == self.dirty_cells:
+            self.end_time = time()
+            print(f'Total elapsed time {self.end_time - self.start_time}')
+            self.running = False
+    
