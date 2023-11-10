@@ -30,11 +30,11 @@ def agent_portrayal(agent):
 
 M = 28
 N = 28
-agents = 30
+agents = 100
 grid = CanvasGrid(agent_portrayal, M, N, 750, 750)
 server = ModularServer(RoomModel, 
                        [grid],
                        "Room cleaning vacuums",
-                       {"M":M, "N": N, "agents" : agents, "max_time": 20 },)
+                       {"M":M, "N": N, "agents" : agents, "max_time": 400 },)
 server.port = 8521
 server.launch()

@@ -76,11 +76,7 @@ class RoomModel(Model):
                 self.schedule.add(dirty_cell)
                 if dirty_cell.live == 1:
                     self.dirty_cells += 1
-        
-        print("Dirty cells:", self.dirty_cells)
-        print("M:", self.M)
-        print("N:", self.N)
-
+    
     def step(self):
         self.schedule.step()
         self.end_time = time()
@@ -91,6 +87,13 @@ class RoomModel(Model):
             print()
             print(f'Total elapsed time: {elapsed_time} \n')
             print(f'Percentage cleaned: {(self.clean_cells*100) / self.dirty_cells}% \n')
-            print(f'Percentage initially dirty: {(self.dirty_cells*100) / (self.M * self.N)}% \n')
+            print(f'Percentage initially dirty: {(self.dirty_cells*100) // (self.M * self.N)}% \n')
+            print(f"Total number of steps made by all agents: {self.num_agents * self.cont} \n")
+            self.running = False
+        elif self.clean_cells == self.dirty_cells:
+            self.end_time = time()
+            print(f'Total elapsed time {self.end_time - self.start_time}')
+            print(f'Porcentage cleaned: {(self.clean_cells*100) / self.dirty_cells}%')
+            print(f'Porcentage initially dirty: {(self.dirty_cells*100) // (self.M * self.N)}%')
             print(f"Total number of steps made by all agents: {self.num_agents * self.cont} \n")
             self.running = False
