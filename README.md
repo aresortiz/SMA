@@ -1,4 +1,4 @@
-# Vaccum Cleanear
+# Vaccum Cleaner
 
 El programa es un simulación de agentes (robots de limpieza) que se deben encargar de limpiar las celdas que se encuentren con basura dentro de un grid. Las siguientes carácteristicas pueden ser modificadas:
    * Habitación de MxN espacios
