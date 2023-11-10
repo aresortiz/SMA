@@ -68,6 +68,7 @@ class RoomModel(Model):
         self.end_time = 0
         self.clean_cells = 0
         self.dirty_cells = 0
+        self.cont = 0
 
         for i in range(agents):
             agent = VacuumCleaner(i, self)
@@ -91,9 +92,11 @@ class RoomModel(Model):
         self.schedule.step()
         self.end_time = time()
         elapsed_time = self.end_time - self.start_time
+        self.cont += 1
         
         if elapsed_time >= self.max_time:
             print(f'Total elapsed time {elapsed_time}')
             print(f'Porcentage cleaned: {(self.clean_cells*100) / self.dirty_cells}%')
             print(f'Porcentage initially dirty: {(self.dirty_cells*100) / (self.M * self.N)}%')
+            print(f"Total number of steps by each agent: {self.num_agents * self.cont}")
             self.running = False
