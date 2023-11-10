@@ -1,27 +1,22 @@
-# Pareja 4
 # Actividad 1 - Agentes de limpieza reactivos 
 # Ares Ortiz Botello A01747848
 # Rosa Itzel Figueroa Rosas A01748086
 
 import random
 import mesa
+import matplotlib.pyplot as plt
 from mesa import Model, Agent
 import numpy as np
 from mesa.time import SimultaneousActivation
 from time import time
-#from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.ModularVisualization import ModularServer
 from mesa.space import MultiGrid
-
-# global clean_cells 
-# clean_cells = 0
 
 class VacuumCleaner(Agent):
 
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
         self.live = 1
-        # self.moore = True
         self.pos = (1, 1)
 
     def random_move(self):
@@ -42,7 +37,6 @@ class VacuumCleaner(Agent):
                     self.model.grid.remove_agent(value)
                     self.model.clean_cells += 1
                 
-
     def step(self):
         self.random_move()
 
@@ -53,7 +47,7 @@ class TrashAgent(Agent):
         super().__init__(unique_id, model)
         self.live = np.random.choice([0, 1])
         self.state = "Dirty"
-
+        
 
 class RoomModel(Model):
     def __init__(self, M, N, agents, max_time):
@@ -83,10 +77,9 @@ class RoomModel(Model):
                 if dirty_cell.live == 1:
                     self.dirty_cells += 1
         
-                
-        print("SUCIAS: ", self.dirty_cells)
+        print("Dirty cells:", self.dirty_cells)
         print("M:", self.M)
-        print("N: ", self.N)
+        print("N:", self.N)
 
     def step(self):
         self.schedule.step()
@@ -95,8 +88,9 @@ class RoomModel(Model):
         self.cont += 1
         
         if elapsed_time >= self.max_time:
-            print(f'Total elapsed time {elapsed_time}')
-            print(f'Porcentage cleaned: {(self.clean_cells*100) / self.dirty_cells}%')
-            print(f'Porcentage initially dirty: {(self.dirty_cells*100) / (self.M * self.N)}%')
-            print(f"Total number of steps by each agent: {self.num_agents * self.cont}")
+            print()
+            print(f'Total elapsed time: {elapsed_time} \n')
+            print(f'Percentage cleaned: {(self.clean_cells*100) / self.dirty_cells}% \n')
+            print(f'Percentage initially dirty: {(self.dirty_cells*100) / (self.M * self.N)}% \n')
+            print(f"Total number of steps made by all agents: {self.num_agents * self.cont} \n")
             self.running = False
