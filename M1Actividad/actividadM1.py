@@ -89,10 +89,11 @@ class RoomModel(Model):
 
     def step(self):
         self.schedule.step()
-        print(self.end_time - self.start_time)
-        if self.start_time == self.max_time:
-            self.end_time = time()
-            print(f'Total elapsed time {self.end_time - self.start_time}')
+        self.end_time = time()
+        elapsed_time = self.end_time - self.start_time
+        
+        if elapsed_time >= self.max_time:
+            print(f'Total elapsed time {elapsed_time}')
             print(f'Porcentage cleaned: {(self.clean_cells*100) / self.dirty_cells}%')
-            print(f'Porcentage initially dirty: {(self.dirty_cells*100) /self.M * self.N}%')
+            print(f'Porcentage initially dirty: {(self.dirty_cells*100) / (self.M * self.N)}%')
             self.running = False

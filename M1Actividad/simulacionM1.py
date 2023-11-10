@@ -35,6 +35,6 @@ grid = CanvasGrid(agent_portrayal, M, N, 750, 750)
 server = ModularServer(RoomModel, 
                        [grid],
                        "Room cleaning vacuums",
-                       {"M":M, "N": N, "agents" : agents, "max_time": 50 },)
+                       {"M":M, "N": N, "agents" : agents, "max_time": 20 },)
 server.port = 8521
 server.launch()
